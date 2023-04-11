@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">WeatherApp</string>
+    <string name="current_time">Today %1$d:%2$d</string>
+    <string name="pressure">%1$.2f hpa</string>
+    <string name="humidity">%1$d\\%</string>
+    <string name="wind_speed">%1$.2f km/h</string>
+    <string name="weather_type">%1$s</string>
+    <string name="temperature">%1$.2f℃</string>
 </resources>

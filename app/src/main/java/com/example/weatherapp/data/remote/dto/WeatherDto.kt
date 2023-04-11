@@ -3,9 +3,9 @@ package com.example.weatherapp.data.remote.dto
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
-import com.example.weatherapp.domain.model.HourlyWeatherData
-import com.example.weatherapp.domain.model.WeatherData
-import com.example.weatherapp.domain.model.WeatherType.Companion.fromWMO
+import com.example.weatherapp.domain.model.weather.HourlyWeatherData
+import com.example.weatherapp.domain.model.weather.WeatherData
+import com.example.weatherapp.domain.model.weather.WeatherType.Companion.fromWMO
 import com.squareup.moshi.Json
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -53,7 +53,7 @@ private fun WeatherDto.toDailyWeatherDataMap(): Map<Int, List<HourlyWeatherData>
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
-fun WeatherDto.toWeatherData(): WeatherData{
+fun WeatherDto.toWeatherData(): WeatherData {
     val now = LocalDateTime.now()
     val dailyWeatherData = toDailyWeatherDataMap()
     val currentWeatherData = dailyWeatherData[0]?.find{

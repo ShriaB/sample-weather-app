@@ -1,5 +1,6 @@
 package com.example.weatherapp.data.repository
 
+import android.util.Log
 import com.example.weatherapp.data.remote.WeatherApiService
 import com.example.weatherapp.data.remote.dto.WeatherDto
 import com.example.weatherapp.domain.repository.WeatherRepository
