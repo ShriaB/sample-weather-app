@@ -14,16 +14,7 @@ import kotlinx.coroutines.flow.flow
 class GetWeatherDataUseCase(
     private val repository: WeatherRepository
 ) {
-
-    /**
-     * Takes the latitude and longitude
-     * Returns a flow
-     * emits the data fetched from the repository if API call successful
-     * else emits error
-     */
     @RequiresApi(Build.VERSION_CODES.O)
-    // We override the invoke operator so that we can call this function just by using the object
-    // No function name required as ideally UseCases perform a single task.
     operator fun invoke(lat: Double, long: Double) : Flow<Result<WeatherData>> = flow{
         emit(Result.Loading())
         val weatherData = repository.getWeather(lat, long).toWeatherData()

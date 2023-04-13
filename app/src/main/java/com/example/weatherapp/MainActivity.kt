@@ -17,18 +17,13 @@ import com.example.weatherapp.domain.model.weather.HourlyWeatherData
 import com.example.weatherapp.presentation.WeatherViewModel
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
-import com.permissionx.guolindev.PermissionX
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private val viewModel by viewModel<WeatherViewModel>()
-
-    // Provides the device location
     private lateinit var fusedLocationClient: FusedLocationProviderClient
-
-
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,16 +31,8 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        /**
-         * Requesting location permission
-         */
         requestLocationPermission()
 
-        /**
-         * Observing the WeatherDataState in the viewModel
-         * If it has finished loading and the data is not null then data is fetched successfully
-         * Render the data to the UI
-         */
         viewModel.weatherDataState.observe(this){
             if(!it.isLoading){
                 it.data?.let{weatherData ->
@@ -55,40 +42,46 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
-
-    /**
-     * Requesting for access to device location using PermissionX
-     * If granted then calling the load data function
-     */
     @RequiresApi(Build.VERSION_CODES.O)
     private fun requestLocationPermission(){
-        PermissionX.init(this)
-            .permissions(android.Manifest.permission.ACCESS_COARSE_LOCATION, android.Manifest.permission.FOREGROUND_SERVICE)
-            .request { allGranted, grantedList, deniedList ->
-                if (allGranted) {
-                    Toast.makeText(this, "All permissions are granted", Toast.LENGTH_LONG).show()
-                    loadData()
-                } else {
-                    Toast.makeText(this, "These permissions are denied: $deniedList", Toast.LENGTH_LONG).show()
-                }
-            }
-    }
 
-    /**
-     * Getting the current location of the device
-     * Passing the latitude and longitude to fetch the weather data of that location
-     */
-    @RequiresApi(Build.VERSION_CODES.O)
-    @Suppress("MissingPermission")
-    fun loadData(){
-        // Getting the last Location and calling the api
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
-        fusedLocationClient.lastLocation
-            .addOnSuccessListener { location : Location? ->
-                // Got last known location. In some rare situations this can be null.
-                location?.let {
-                    viewModel.getWeatherData(it.latitude, it.longitude)
+        val requestPermissionLauncher =
+            registerForActivityResult(
+                ActivityResultContracts.RequestPermission()
+            ) { isGranted: Boolean ->
+                if (isGranted) {
+                    // Permission is granted. Continue the action or workflow in your
+                    // app.
+                    Toast.makeText(this, "Permission Granted", Toast.LENGTH_LONG).show()
+                } else {
+                    Toast.makeText(this, "Permission Denied", Toast.LENGTH_LONG).show()
                 }
             }
+
+        when (PackageManager.PERMISSION_GRANTED) {
+            ContextCompat.checkSelfPermission(
+                this,
+                android.Manifest.permission.ACCESS_COARSE_LOCATION
+            ) -> {
+                // You can use the API that requires the permission.
+                Toast.makeText(this, "Permission Granted and working", Toast.LENGTH_LONG).show()
+
+                // Getting the Location and calling the api
+                fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+                fusedLocationClient.lastLocation
+                    .addOnSuccessListener { location : Location? ->
+                        // Got last known location. In some rare situations this can be null.
+                        location?.let {
+                            viewModel.getWeatherData(it.latitude, it.longitude)
+                        }
+                    }
+            }
+            else -> {
+                // You can directly ask for the permission.
+                // The registered ActivityResultCallback gets the result of this request.
+                requestPermissionLauncher.launch(
+                    android.Manifest.permission.ACCESS_COARSE_LOCATION)
+            }
+        }
     }
 }

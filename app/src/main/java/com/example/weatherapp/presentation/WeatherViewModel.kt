@@ -12,13 +12,6 @@ import com.example.weatherapp.domain.model.weather.WeatherDataState
 import com.example.weatherapp.domain.use_cases.GetWeatherDataUseCase
 import kotlinx.coroutines.launch
 
-/**
- * @property _weatherDataState Stores the status of the API call
- *  - Loading: isLoading = true
- *  - Successful - data = WeatherData
- *  - Error - error = Error message
- */
-
 @RequiresApi(Build.VERSION_CODES.O)
 class WeatherViewModel(
     private val useCase: GetWeatherDataUseCase
@@ -28,11 +21,6 @@ class WeatherViewModel(
     val weatherDataState: LiveData<WeatherDataState>
         get() = _weatherDataState
 
-    /**
-     * Calling the UseCase GetWeatherDataUseCase by passing the latitude and longitude
-     * Collecting the values emitted by the flow
-     * Accordingly changing the status of the _weatherDataState
-     */
     @RequiresApi(Build.VERSION_CODES.O)
     fun getWeatherData(lat: Double, long: Double){
         Log.d("Mydebug", "$lat, $long")

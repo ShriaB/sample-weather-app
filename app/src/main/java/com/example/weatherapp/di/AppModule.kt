@@ -17,10 +17,6 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 @RequiresApi(Build.VERSION_CODES.O)
 val appModule = module{
 
-    /**
-     * Retrofit REST Client
-     * With Moshi converter
-     */
     single{
         Retrofit.Builder()
             .baseUrl("https://api.open-meteo.com")
