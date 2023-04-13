@@ -3,7 +3,9 @@ package com.example.weatherapp.domain.model.weather
 import androidx.annotation.DrawableRes
 import com.example.weatherapp.R
 
-
+/**
+ * Maps a weather type to its description and corresponding icon
+ */
 sealed class WeatherType(
     val weatherDesc: String,
     @DrawableRes val iconRes: Int
