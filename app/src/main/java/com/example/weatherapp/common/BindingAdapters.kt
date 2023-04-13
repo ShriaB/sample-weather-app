@@ -9,6 +9,10 @@ import androidx.annotation.RequiresApi
 import androidx.databinding.BindingAdapter
 import java.time.LocalDateTime
 
+/**
+ * Data binding helps in rendering the data dynamically when available after fetching it from a data source
+ */
+
 @BindingAdapter("setImage")
 fun setImage(view: ImageView, resId: Int){
     view.setImageResource(resId)

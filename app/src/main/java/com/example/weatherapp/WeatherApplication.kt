@@ -11,6 +11,9 @@ class WeatherApplication: Application() {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate() {
         super.onCreate()
+        /**
+         * Instantiation of Koin for dependency injection
+         */
         startKoin {
             androidContext(this@WeatherApplication)
             modules(appModule)
