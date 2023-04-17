@@ -66,4 +66,7 @@ dependencies {
 
     // PermissionX
     implementation 'com.guolindev.permissionx:permissionx:1.7.1'
+
+    // For notification
+    implementation "androidx.core:core:1.10.0"
 }
